@@ -28,9 +28,22 @@ export default function CompassDashboard() {
             
             const data = await response.json();
             
-            if (data.services) {
-                 setServices(data.services);
+            
+            // Map the JLou4 camelCase array into what this UI expects (snake_case)
+            if (Array.isArray(data)) {
+                 setServices(data.map((svc: any) => ({
+                      service_domain: svc.domain || svc.serviceDomain,
+                      total_reviews: svc.calls,
+                      success_rate: svc.successRate,
+                      task_success_rate: svc.taskSuccessRate,
+                      avg_latency_ms: svc.p95 || svc.avgLatencyMs,
+                      cost_per_call: svc.costPerCall || 0,
+                      reliability_score: svc.reliabilityScore || 0
+                 })));
+            } else if (data.services) {
+                 setServices(data.services); // Fallback for old API shape
             }
+
             setApiError(null);
         } catch (e: any) {
             console.error("Compass API Desync:", e);
