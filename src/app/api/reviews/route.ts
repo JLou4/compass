@@ -45,6 +45,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Input sanitization — enforce length limits
+    if (agentId.length > 64 || serviceDomain.length > 255) {
+      return NextResponse.json(
+        { error: 'Field length exceeds maximum' },
+        { status: 400 }
+      );
+    }
+    if (endpoint && endpoint.length > 512) {
+      return NextResponse.json(
+        { error: 'Endpoint URL too long' },
+        { status: 400 }
+      );
+    }
+    if (notes && notes.length > 1000) {
+      return NextResponse.json(
+        { error: 'Notes too long (max 1000 chars)' },
+        { status: 400 }
+      );
+    }
+
     // Validate reliability score if provided
     if (reliabilityScore !== undefined && (reliabilityScore < 1 || reliabilityScore > 5)) {
       return NextResponse.json(
