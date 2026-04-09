@@ -33,7 +33,7 @@ export default function CompassDashboard() {
             if (Array.isArray(data)) {
                  setServices(data.map((svc: any) => ({
                       service_domain: svc.domain || svc.serviceDomain,
-                      total_reviews: svc.calls,
+                      total_reviews: svc.totalCalls,
                       success_rate: svc.successRate,
                       task_success_rate: svc.taskSuccessRate,
                       avg_latency_ms: svc.p95 || svc.avgLatencyMs,
