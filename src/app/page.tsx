@@ -66,8 +66,8 @@ export default function DashboardClient() {
 
             <nav className="mt-6 md:mt-0 flex gap-8 text-sm font-medium tracking-wide">
                 <span className="text-cyan-400 border-b border-cyan-400 pb-1 cursor-pointer">Live Matrix</span>
-                <span className="text-white/40 hover:text-white transition-colors cursor-pointer">Network Topography</span>
-                <span className="text-white/40 hover:text-white transition-colors cursor-pointer">Agent API</span>
+                <a href="/services" className="text-white/40 hover:text-white transition-colors cursor-pointer">Network Topography</a>
+                <a href="/docs" className="text-white/40 hover:text-white transition-colors cursor-pointer">Agent API</a>
             </nav>
           </header>
 
@@ -81,9 +81,9 @@ export default function DashboardClient() {
                    We take the abstract concept of API reliability and synthesize it into explicit mathematical consensus. Driven purely by real agent interaction logs.
                 </p>
                 <div className="flex items-center space-x-4">
-                   <button className="tidal-button px-8 py-3.5 rounded-xl font-medium tracking-wide text-sm flex items-center transition-all">
+                   <a href="#matrix" onClick={(e) => { e.preventDefault(); document.getElementById('matrix')?.scrollIntoView({ behavior: 'smooth' }); }} className="tidal-button px-8 py-3.5 rounded-xl font-medium tracking-wide text-sm flex items-center transition-all w-fit">
                       <Activity className="w-4 h-4 mr-2" /> View Rollups
-                   </button>
+                   </a>
                    <div className="flex items-center space-x-3 px-4 py-3 rounded-xl border border-white/10 bg-white/5">
                       <span className="relative flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -117,7 +117,7 @@ export default function DashboardClient() {
 
           <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent mb-16"></div>
 
-          <div className="w-full tidal-glass-panel rounded-2xl overflow-hidden mb-24">
+          <div id="matrix" className="w-full tidal-glass-panel rounded-2xl overflow-hidden mb-24">
             <div className="p-6 border-b border-white/10 bg-black/50 flex justify-between items-center">
                 <h2 className="text-xl font-serif text-white tracking-tight flex items-center">
                     <ShieldCheck className="w-5 h-5 text-cyan-400 mr-3" />
