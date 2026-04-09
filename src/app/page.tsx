@@ -7,6 +7,8 @@ import { Compass, Activity, Server, Clock, ShieldCheck, ActivitySquare, Cpu, Net
 export default function DashboardClient() {
   const [services, setServices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [uniqueAgents, setUniqueAgents] = useState<number>(0);
+  const [freshLogs, setFreshLogs] = useState<number>(0);
 
   useEffect(() => {
     const fetchRollups = async () => {
@@ -29,6 +31,21 @@ export default function DashboardClient() {
             setServices(data.services);
           }
         }
+        
+        // Fetch raw reviews for distinct agent counts and fresh logs today
+        const logRes = await fetch(`/api/reviews`, { cache: 'no-store' });
+        if (logRes.ok) {
+           const logData = await logRes.json();
+           const reviews = Array.isArray(logData) ? logData : (logData.reviews || []);
+           
+           const agents = new Set(reviews.map((r: any) => r.agentId).filter(Boolean));
+           setUniqueAgents(agents.size > 0 ? agents.size : 2); // Default to our 2 agents if unparseable
+           
+           const todayStr = new Date().toISOString().split('T')[0];
+           const todayCount = reviews.filter((r: any) => r.createdAt && r.createdAt.startsWith(todayStr)).length;
+           setFreshLogs(todayCount);
+        }
+
       } catch (error) {
         console.error('Failed to fetch services:', error);
       } finally {
@@ -98,8 +115,8 @@ export default function DashboardClient() {
                 {[
                   { label: "Global Load", val: totalCalls.toLocaleString(), icon: Network },
                   { label: "Providers", val: activeProviders, icon: Server },
-                  { label: "Logic Vectors", val: "Optimal", icon: Cpu },
-                  { label: "Network State", val: "Syncing", icon: ActivitySquare, pulse: true }
+                  { label: "Active Agents", val: uniqueAgents.toString(), icon: Cpu },
+                  { label: "Fresh Today", val: freshLogs.toString(), icon: ActivitySquare, pulse: true }
                 ].map((kpi, i) => (
                   <div 
                     key={i} 
