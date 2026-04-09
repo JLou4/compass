@@ -25,12 +25,12 @@ export async function GET(request: NextRequest) {
     const services = serviceStats.map(service => ({
       serviceDomain: service.serviceDomain,
       latestDate: service.latestDate,
-      totalCalls: service.totalCalls || 0,
-      successRate: service.avgSuccessRate ? parseFloat(service.avgSuccessRate.toFixed(2)) : null,
-      taskSuccessRate: service.avgTaskSuccessRate ? parseFloat(service.avgTaskSuccessRate.toFixed(2)) : null,
-      avgLatencyMs: service.avgLatency ? Math.round(service.avgLatency) : null,
-      avgP95LatencyMs: service.avgP95Latency ? Math.round(service.avgP95Latency) : null,
-      avgReliability: service.avgReliability ? parseFloat(service.avgReliability.toFixed(2)) : null
+      totalCalls: Number(service.totalCalls) || 0,
+      successRate: service.avgSuccessRate ? parseFloat(Number(service.avgSuccessRate).toFixed(2)) : null,
+      taskSuccessRate: service.avgTaskSuccessRate ? parseFloat(Number(service.avgTaskSuccessRate).toFixed(2)) : null,
+      avgLatencyMs: service.avgLatency ? Math.round(Number(service.avgLatency)) : null,
+      avgP95LatencyMs: service.avgP95Latency ? Math.round(Number(service.avgP95Latency)) : null,
+      avgReliability: service.avgReliability ? parseFloat(Number(service.avgReliability).toFixed(2)) : null
     }));
 
     return NextResponse.json(services);
