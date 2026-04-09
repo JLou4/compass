@@ -12,7 +12,7 @@
 const https = require('https');
 
 const COMPASS_URL = 'compass-hazel-nine.vercel.app';
-const AGENT_ID = 'icarus';
+const AGENT_ID = 'geppetto9000';
 
 function log(serviceDomain, endpoint, method, statusCode, success, taskSuccess, latencyMs, notes) {
   const payload = JSON.stringify({
