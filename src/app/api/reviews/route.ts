@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     const agentId = searchParams.get('agentId');
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100);
 
-    let query = db.select().from(reviews);
+    let query = db.select().from(reviews).$dynamic();
 
     // Add service domain filter if provided
     if (service) {

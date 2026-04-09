@@ -80,11 +80,11 @@ export async function POST(request: NextRequest) {
           serviceDomain,
           date: targetDate,
           totalCalls: stats.totalCalls,
-          successRate: parseFloat(successRate.toFixed(2)),
-          taskSuccessRate: taskSuccessRate ? parseFloat(taskSuccessRate.toFixed(2)) : null,
-          avgLatencyMs: stats.avgLatency ? Math.round(stats.avgLatency) : null,
+          successRate: successRate.toFixed(2),
+          taskSuccessRate: taskSuccessRate ? taskSuccessRate.toFixed(2) : null,
+          avgLatencyMs: stats.avgLatency ? Math.round(Number(stats.avgLatency)) : null,
           p95LatencyMs: p95Latency,
-          avgReliability: stats.avgReliability ? parseFloat(stats.avgReliability.toFixed(2)) : null
+          avgReliability: stats.avgReliability ? Number(stats.avgReliability).toFixed(2) : null
         };
 
         if (existingRollup.length > 0) {
@@ -93,11 +93,11 @@ export async function POST(request: NextRequest) {
             .update(dailyRollups)
             .set({
               totalCalls: rollupData.totalCalls,
-              successRate: rollupData.successRate,
-              taskSuccessRate: rollupData.taskSuccessRate,
+              successRate: rollupData.successRate.toString(),
+              taskSuccessRate: rollupData.taskSuccessRate ? rollupData.taskSuccessRate.toString() : null,
               avgLatencyMs: rollupData.avgLatencyMs,
               p95LatencyMs: rollupData.p95LatencyMs,
-              avgReliability: rollupData.avgReliability
+              avgReliability: rollupData.avgReliability ? rollupData.avgReliability.toString() : null
             })
             .where(and(
               eq(dailyRollups.serviceDomain, serviceDomain),
@@ -105,7 +105,13 @@ export async function POST(request: NextRequest) {
             ));
         } else {
           // Insert new rollup
-          await db.insert(dailyRollups).values(rollupData);
+          await db.insert(dailyRollups).values({
+              ...rollupData,
+              successRate: rollupData.successRate.toString(),
+              taskSuccessRate: rollupData.taskSuccessRate ? rollupData.taskSuccessRate.toString() : null,
+              avgReliability: rollupData.avgReliability ? rollupData.avgReliability.toString() : null
+          });
+
         }
 
         processedServices++;
