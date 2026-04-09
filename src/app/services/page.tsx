@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+
 import { db } from '@/lib/db'
 import { reviews } from '@/lib/schema'
 import { sql, count } from 'drizzle-orm'

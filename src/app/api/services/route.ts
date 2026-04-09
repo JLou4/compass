@@ -6,7 +6,7 @@ import { sql, desc } from 'drizzle-orm';
 <<<<<<< HEAD
 export const dynamic = "force-dynamic";
 =======
-export const dynamic = 'force-dynamic';
+
 >>>>>>> main
 
 export async function GET(request: NextRequest) {
