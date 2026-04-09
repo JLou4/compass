@@ -21,8 +21,8 @@ export default async function ServicesPage() {
   const servicesWithStats = serviceStats.map(service => ({
     ...service,
     successRate: service.totalReviews > 0 ? (service.successCount / service.totalReviews * 100) : 0,
-    avgLatency: service.avgLatency ? Math.round(service.avgLatency) : null,
-    avgReliability: service.avgReliability ? parseFloat(service.avgReliability.toFixed(1)) : null
+    avgLatency: service.avgLatency ? Math.round(Number(service.avgLatency)) : null,
+    avgReliability: service.avgReliability ? parseFloat(Number(service.avgReliability).toFixed(1)) : null
   }));
 
   return (

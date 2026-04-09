@@ -61,9 +61,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         totalReviews,
         successRate: parseFloat(successRate.toFixed(2)),
         taskSuccessRate: parseFloat(taskSuccessRate.toFixed(2)),
-        avgLatencyMs: stats.avgLatency ? Math.round(stats.avgLatency) : null,
-        avgReliability: stats.avgReliability ? parseFloat(stats.avgReliability.toFixed(2)) : null,
-        totalCostEstimate: stats.totalCostEstimate ? parseFloat(stats.totalCostEstimate.toFixed(6)) : null,
+        avgLatencyMs: stats.avgLatency ? Math.round(Number(stats.avgLatency)) : null,
+        avgReliability: stats.avgReliability ? parseFloat(Number(stats.avgReliability).toFixed(2)) : null,
+        totalCostEstimate: stats.totalCostEstimate ? parseFloat(Number(stats.totalCostEstimate).toFixed(6)) : null,
         uniqueAgents: uniqueAgents.length
       },
       dailyRollups: rollupData,

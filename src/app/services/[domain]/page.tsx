@@ -91,7 +91,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-semibold text-yellow-800 text-sm">Avg Latency</h3>
           <p className="text-2xl font-bold text-yellow-600">
-            {overallStats.avgLatency ? `${Math.round(overallStats.avgLatency)}ms` : '—'}
+            {overallStats.avgLatency ? `${Math.round(Number(overallStats.avgLatency))}ms` : '—'}
           </p>
         </div>
       </div>
@@ -102,14 +102,14 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
           <h3 className="font-semibold text-gray-800 text-sm">Avg Reliability</h3>
           <p className="text-xl font-bold text-gray-600">
             {overallStats.avgReliability ? (
-              <>⭐ {parseFloat(overallStats.avgReliability.toFixed(2))}/5</>
+              <>⭐ {parseFloat(Number(overallStats.avgReliability).toFixed(2))}/5</>
             ) : '—'}
           </p>
         </div>
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="font-semibold text-gray-800 text-sm">Total Cost</h3>
           <p className="text-xl font-bold text-gray-600">
-            {overallStats.totalCost ? `$${parseFloat(overallStats.totalCost.toFixed(4))}` : '—'}
+            {overallStats.totalCost ? `$${parseFloat(Number(overallStats.totalCost).toFixed(4))}` : '—'}
           </p>
         </div>
         <div className="bg-white p-4 rounded-lg shadow">

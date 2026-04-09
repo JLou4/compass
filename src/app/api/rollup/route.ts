@@ -80,11 +80,11 @@ export async function POST(request: NextRequest) {
           serviceDomain,
           date: targetDate,
           totalCalls: stats.totalCalls,
-          successRate: parseFloat(successRate.toFixed(2)),
-          taskSuccessRate: taskSuccessRate ? parseFloat(taskSuccessRate.toFixed(2)) : null,
-          avgLatencyMs: stats.avgLatency ? Math.round(stats.avgLatency) : null,
+          successRate: successRate.toFixed(2),
+          taskSuccessRate: taskSuccessRate ? taskSuccessRate.toFixed(2) : null,
+          avgLatencyMs: stats.avgLatency ? Math.round(Number(stats.avgLatency)) : null,
           p95LatencyMs: p95Latency,
-          avgReliability: stats.avgReliability ? parseFloat(stats.avgReliability.toFixed(2)) : null
+          avgReliability: stats.avgReliability ? Number(stats.avgReliability).toFixed(2) : null
         };
 
         if (existingRollup.length > 0) {
