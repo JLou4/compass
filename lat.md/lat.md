@@ -2,3 +2,4 @@ This directory defines the high-level concepts, business logic, and architecture
 
 - [[compass_architecture]] - The overarching UI and Agentic Trust principles.
 - [[database_schema]] - The strict Neon database constraints and table definitions.
+- [[status]] - Current UI integration flow execution status.
