@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { reviews } from '@/lib/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
   try {
@@ -84,20 +84,21 @@ export async function GET(request: NextRequest) {
     const agentId = searchParams.get('agentId');
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100);
 
-    let query = db.select().from(reviews);
-
-    // Add service domain filter if provided
+    // Build filter conditions
+    const conditions = [];
     if (service) {
-      query = query.where(eq(reviews.serviceDomain, service));
+      conditions.push(eq(reviews.serviceDomain, service));
     }
-
-    // Add agent filter if provided  
     if (agentId) {
-      query = query.where(eq(reviews.agentId, agentId));
+      conditions.push(eq(reviews.agentId, agentId));
     }
 
-    // Sort by recency
-    const allReviews = await query.orderBy(desc(reviews.createdAt)).limit(limit);
+    // Query with all conditions
+    let query = db.select().from(reviews);
+    const filtered = conditions.length > 0
+      ? query.where(and(...conditions))
+      : query;
+    const allReviews = await filtered.orderBy(desc(reviews.createdAt)).limit(limit);
     
     return NextResponse.json(allReviews);
   } catch (error) {
