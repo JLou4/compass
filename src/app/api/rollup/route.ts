@@ -3,6 +3,8 @@ import { db } from '@/lib/db';
 import { dailyRollups, reviews } from '@/lib/schema';
 import { eq, and, sql, count, avg } from 'drizzle-orm';
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

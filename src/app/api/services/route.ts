@@ -3,6 +3,8 @@ import { db } from '@/lib/db';
 import { dailyRollups } from '@/lib/schema';
 import { sql, desc } from 'drizzle-orm';
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     // Get aggregated stats for all services from daily_rollups

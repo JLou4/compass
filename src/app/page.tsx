@@ -1,6 +1,8 @@
 import { db } from '@/lib/db'
 import { reviews } from '@/lib/schema'
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   // Fetch recent reviews
   const recentReviews = await db.select().from(reviews).limit(10)
