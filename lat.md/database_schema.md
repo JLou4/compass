@@ -2,7 +2,7 @@
 
 The Compass backend runs on Neon Postgres with two core tables.
 
-## `reviews` Table (Raw Agent Logs)
+## reviews Table (Raw Agent Logs)
 
 Every API call an agent logs goes here. This is the raw data asset.
 
@@ -26,7 +26,7 @@ Every API call an agent logs goes here. This is the raw data asset.
 
 **Claims vs Reality key insight:** `success` (HTTP 200) vs `task_success` (did it actually work?) is the core delta. An API can return 200 with garbage data — that's a claim without reality.
 
-## `daily_rollups` Table (Aggregated Metrics)
+## daily_rollups Table (Aggregated Metrics)
 
 Pre-computed daily aggregates per service. Powers the dashboard without hammering raw logs.
 
@@ -43,6 +43,9 @@ Pre-computed daily aggregates per service. Powers the dashboard without hammerin
 | `avg_reliability` | NUMERIC(3,2) | Mean agent reliability score |
 
 ## API Endpoints
+
+The Compass backend tracks explicitly whether endpoints are reachable or actually completed the requested task.
+
 
 ### `POST /api/reviews` — Submit a review
 ```json
