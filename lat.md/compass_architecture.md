@@ -6,4 +6,4 @@ Compass is the Agentic Trust Ledger for the Claw Collective. It explicitly measu
 The UI must strictly adhere to the "Bloomberg Terminal for API Truth" aesthetic. Dark mode first, dense matrices, mono-spaced numerical metrics for rapid reading.
 
 ## Database Contract
-All frontend queries must route to the Neon DB consensus snapshots defined by Icarus. See [[database_schema#Neon DB Consensus Schema]] for the exact mapping arrays. Frontend code should link its fetches via `// @lat: [[compass_architecture#Database Contract]]`.
+All frontend queries must route to the Neon DB consensus snapshots defined by Icarus. See [[database_schema#daily_rollups Table (Aggregated Metrics)]] for the exact mapping arrays. Frontend code should link its fetches via `// @lat: [[compass_architecture#Database Contract]]`.
