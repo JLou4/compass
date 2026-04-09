@@ -1,0 +1,232 @@
+
+> compass@0.1.0 build
+> next build
+
+   ▲ Next.js 14.1.0
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+The `fetchConnectionCache` option is deprecated (now always `true`)
+The `fetchConnectionCache` option is deprecated (now always `true`)
+The `fetchConnectionCache` option is deprecated (now always `true`)
+The `fetchConnectionCache` option is deprecated (now always `true`)
+The `fetchConnectionCache` option is deprecated (now always `true`)
+The `fetchConnectionCache` option is deprecated (now always `true`)
+The `fetchConnectionCache` option is deprecated (now always `true`)
+   Generating static pages (0/8) ...
+   Generating static pages (2/8) 
+Error fetching services: NeonDbError: Error connecting to database: fetch failed
+    at execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7266)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+    at async d (/Users/gjm/.openclaw/workspace/compass/.next/server/app/api/services/route.js:1:512)
+    at async /Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:42484
+    at async eI.execute (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:32486)
+    at async eI.handle (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:43737)
+    at async exportAppRoute (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/export/routes/app-route.js:77:26)
+    at async exportPageImpl (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/export/worker.js:175:20)
+    at async /Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/export/worker.js:239:16 {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: TypeError: fetch failed
+      at node:internal/deps/undici/undici:16416:13
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async globalThis.fetch (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:36091)
+      at async execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7177)
+      at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+      at async d (/Users/gjm/.openclaw/workspace/compass/.next/server/app/api/services/route.js:1:512)
+      at async /Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:42484
+      at async eI.execute (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:32486)
+      at async eI.handle (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:43737)
+      at async exportAppRoute (/Users/gjm/.openclaw/workspace/compass/node_modules/next/dist/export/routes/app-route.js:77:26) {
+    [cause]: AggregateError [ECONNREFUSED]: 
+        at internalConnectMultiple (node:net:1134:18)
+        at afterConnectMultiple (node:net:1715:7) {
+      code: 'ECONNREFUSED',
+      [errors]: [Array]
+    }
+  }
+}
+NeonDbError: Error connecting to database: fetch failed
+    at execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7266)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+    at async o (/Users/gjm/.openclaw/workspace/compass/.next/server/app/services/page.js:1:3451) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: TypeError: fetch failed
+      at node:internal/deps/undici/undici:16416:13
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async globalThis.fetch (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/638.js:1:36415)
+      at async execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7177)
+      at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+      at async o (/Users/gjm/.openclaw/workspace/compass/.next/server/app/services/page.js:1:3451) {
+    [cause]: AggregateError [ECONNREFUSED]: 
+        at internalConnectMultiple (node:net:1134:18)
+        at afterConnectMultiple (node:net:1715:7) {
+      code: 'ECONNREFUSED',
+      [errors]: [Array]
+    }
+  }
+}
+NeonDbError: Error connecting to database: fetch failed
+    at execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7266)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+    at async o (/Users/gjm/.openclaw/workspace/compass/.next/server/app/services/page.js:1:3451) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: TypeError: fetch failed
+      at node:internal/deps/undici/undici:16416:13
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async globalThis.fetch (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/638.js:1:36415)
+      at async execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7177)
+      at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+      at async o (/Users/gjm/.openclaw/workspace/compass/.next/server/app/services/page.js:1:3451) {
+    [cause]: AggregateError [ECONNREFUSED]: 
+        at internalConnectMultiple (node:net:1134:18)
+        at afterConnectMultiple (node:net:1715:7) {
+      code: 'ECONNREFUSED',
+      [errors]: [Array]
+    }
+  }
+}
+NeonDbError: Error connecting to database: fetch failed
+    at execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7266)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+    at async n (/Users/gjm/.openclaw/workspace/compass/.next/server/app/page.js:1:3303) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: TypeError: fetch failed
+      at node:internal/deps/undici/undici:16416:13
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async globalThis.fetch (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/638.js:1:36415)
+      at async execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7177)
+      at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+      at async n (/Users/gjm/.openclaw/workspace/compass/.next/server/app/page.js:1:3303) {
+    [cause]: AggregateError [ECONNREFUSED]: 
+        at internalConnectMultiple (node:net:1134:18)
+        at afterConnectMultiple (node:net:1715:7) {
+      code: 'ECONNREFUSED',
+      [errors]: [Array]
+    }
+  }
+}
+NeonDbError: Error connecting to database: fetch failed
+    at execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7266)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+    at async n (/Users/gjm/.openclaw/workspace/compass/.next/server/app/page.js:1:3303) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: TypeError: fetch failed
+      at node:internal/deps/undici/undici:16416:13
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async globalThis.fetch (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/638.js:1:36415)
+      at async execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7177)
+      at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+      at async n (/Users/gjm/.openclaw/workspace/compass/.next/server/app/page.js:1:3303) {
+    [cause]: AggregateError [ECONNREFUSED]: 
+        at internalConnectMultiple (node:net:1134:18)
+        at afterConnectMultiple (node:net:1715:7) {
+      code: 'ECONNREFUSED',
+      [errors]: [Array]
+    }
+  }
+}
+
+Error occurred prerendering page "/services". Read more: https://nextjs.org/docs/messages/prerender-error
+
+NeonDbError: Error connecting to database: fetch failed
+    at execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7266)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+    at async o (/Users/gjm/.openclaw/workspace/compass/.next/server/app/services/page.js:1:3451)
+   Generating static pages (4/8) 
+
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+
+NeonDbError: Error connecting to database: fetch failed
+    at execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:11:7266)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async eL.execute (/Users/gjm/.openclaw/workspace/compass/.next/server/chunks/117.js:34:29202)
+    at async n (/Users/gjm/.openclaw/workspace/compass/.next/server/app/page.js:1:3303)
+   Generating static pages (6/8) 
+ ✓ Generating static pages (8/8) 
+
+> Export encountered errors on following paths:
+	/page: /
+	/services/page: /services
