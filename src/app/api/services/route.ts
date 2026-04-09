@@ -3,11 +3,7 @@ import { db } from '@/lib/db';
 import { dailyRollups } from '@/lib/schema';
 import { sql, desc } from 'drizzle-orm';
 
-<<<<<<< HEAD
 export const dynamic = "force-dynamic";
-=======
-
->>>>>>> main
 
 export async function GET(request: NextRequest) {
   try {
