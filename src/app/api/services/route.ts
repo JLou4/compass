@@ -12,11 +12,11 @@ export async function GET(request: NextRequest) {
         serviceDomain: dailyRollups.serviceDomain,
         latestDate: sql<Date>`MAX(${dailyRollups.date})`,
         totalCalls: sql<number>`SUM(${dailyRollups.totalCalls})`,
-        avgSuccessRate: sql<number>`AVG(${dailyRollups.successRate})`,
-        avgTaskSuccessRate: sql<number>`AVG(${dailyRollups.taskSuccessRate})`,
+        avgSuccessRate: sql<number>`AVG(CAST(${dailyRollups.successRate} AS numeric))`,
+        avgTaskSuccessRate: sql<number>`AVG(CAST(${dailyRollups.taskSuccessRate} AS numeric))`,
         avgLatency: sql<number>`AVG(${dailyRollups.avgLatencyMs})`,
         avgP95Latency: sql<number>`AVG(${dailyRollups.p95LatencyMs})`,
-        avgReliability: sql<number>`AVG(${dailyRollups.avgReliability})`
+        avgReliability: sql<number>`AVG(CAST(${dailyRollups.avgReliability} AS numeric))`
       })
       .from(dailyRollups)
       .groupBy(dailyRollups.serviceDomain)
