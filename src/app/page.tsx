@@ -1,191 +1,217 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Compass, Activity, Server, Clock, GitCommit, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Compass, Activity, Server, Clock, ShieldCheck, ActivitySquare, Cpu, Network } from 'lucide-react';
 
-type RollupInfo = {
-    service_domain: string;
-    service_name: string;
-    avg_latency_ms: number;
-    avg_reliability: number;
-    total_reviews: number;
-}
+export default function DashboardClient() {
+  const [services, setServices] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-export default function CompassDashboard() {
-    const [services, setServices] = useState<RollupInfo[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isRefreshing, setIsRefreshing] = useState(false);
-    const [apiError, setApiError] = useState<string | null>(null);
-
-    const fetchCompassNetwork = async () => {
-        setIsRefreshing(true);
-        try {
-            // Hot-wired directly into Icarus' Edge Node API (Relative path for single-repo)
-            const response = await fetch('/api/services');
-            if (!response.ok) throw new Error("API Edge Failure");
-            
-            const data = await response.json();
-            
-            
-            // Map the JLou4 camelCase array into what this UI expects (snake_case)
-            if (Array.isArray(data)) {
-                 setServices(data.map((svc: any) => ({
-                      service_domain: svc.domain || svc.serviceDomain,
-                      total_reviews: svc.totalCalls,
-                      success_rate: svc.successRate,
-                      task_success_rate: svc.taskSuccessRate,
-                      avg_latency_ms: svc.p95 || svc.avgLatencyMs,
-                      cost_per_call: svc.costPerCall || 0,
-                      reliability_score: svc.reliabilityScore || 0
-                 })));
-            } else if (data.services) {
-                 setServices(data.services); // Fallback for old API shape
-            }
-
-            setApiError(null);
-        } catch (e: any) {
-            console.error("Compass API Desync:", e);
-            setApiError("Failed to synchronize with Compass Agent ledger.");
-        } finally {
-            setIsLoading(false);
-            setIsRefreshing(false);
+  useEffect(() => {
+    const fetchRollups = async () => {
+      try {
+        const res = await fetch(`/api/services`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          // Our API returns a flat camelCase array; map to snake_case for the UI
+          if (Array.isArray(data)) {
+            setServices(data.map((svc: any) => ({
+              service_domain: svc.serviceDomain,
+              service_name: svc.serviceDomain?.split('.').slice(-2, -1)[0] || svc.serviceDomain,
+              avg_reliability: svc.avgReliability,
+              avg_latency_ms: svc.avgLatencyMs,
+              total_reviews: svc.totalCalls,
+              success_rate: svc.successRate,
+              task_success_rate: svc.taskSuccessRate,
+            })));
+          } else if (data.services) {
+            setServices(data.services);
+          }
         }
+      } catch (error) {
+        console.error('Failed to fetch services:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
+    fetchRollups();
+    const interval = setInterval(fetchRollups, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
-    useEffect(() => {
-        fetchCompassNetwork();
-        
-        // Background polling loop to watch the agents execute
-        const interval = setInterval(() => {
-             fetchCompassNetwork();
-        }, 15000);
-        
-        return () => clearInterval(interval);
-    }, []);
+  const router = useRouter();
+  const totalCalls = services.reduce((acc, curr) => acc + (Number(curr.total_reviews) || 0), 0);
+  const activeProviders = services.length;
 
-    const totalReviews = services.reduce((acc, curr) => acc + (curr.total_reviews || 0), 0);
+  return (
+    <div className="min-h-screen bg-black text-white font-sans p-4 md:p-12 lg:px-24 flex flex-col relative overflow-hidden">
+      
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vh] bg-cyan-400/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-    return (
-        <main className="min-h-screen bg-[#0a0a0a] text-zinc-300 font-sans p-8 md:p-12 lg:px-24">
-            
-            <header className="flex items-center justify-between border-b border-zinc-800 pb-8 mb-12 relative">
-                <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)]">
-                        <Compass className="w-6 h-6 text-indigo-400" />
-                    </div>
-                    <div>
-                        <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Compass</h1>
-                        <p className="text-zinc-500 text-sm font-mono tracking-wide mt-1">THE AGENTIC TRUST LEDGER</p>
-                    </div>
-                </div>
-                
-                <div className="flex items-center space-x-6">
-                    <button 
-                         onClick={fetchCompassNetwork} 
-                         className="text-zinc-500 hover:text-zinc-300 transition-colors flex items-center text-sm font-mono"
-                    >
-                         <RefreshCw className={`w-4 h-4 mr-2 border-zinc-800 ${isRefreshing ? 'animate-spin text-emerald-400' : ''}`} />
-                         Auto-Sync
-                    </button>
-                    <div className="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center space-x-2 shadow-lg">
-                        <span className="relative flex h-2 w-2">
-                            {apiError ? <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span> : (
-                                <>
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                                </>
-                            )}
-                        </span>
-                        <span className="text-xs font-mono text-zinc-400 tracking-wider">
-                            {apiError ? 'NETWORK DESYNC' : 'NETWORK ACTIVE'}
-                        </span>
-                    </div>
-                </div>
-            </header>
-
-            {apiError && (
-                <div className="mb-8 p-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-lg font-mono text-sm uppercase tracking-widest text-center">
-                     {apiError}
-                </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                {[
-                    { label: "Active Agent Swarms", val: "2", icon: GitCommit, color: "text-blue-400" },
-                    { label: "Global API Tests", val: totalReviews || "-", icon: Activity, color: "text-emerald-400" },
-                    { label: "Providers Tracked", val: services.length || "-", icon: Server, color: "text-indigo-400" },
-                    { label: "Ledger State", val: "Live", icon: Clock, color: "text-amber-400" }
-                ].map((kpi, i) => (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} key={i} className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl">
-                        <div className="flex items-center space-x-3 text-zinc-400 mb-4">
-                            <kpi.icon className={`w-4 h-4 ${kpi.color}`} />
-                            <span className="text-xs font-semibold uppercase tracking-wider">{kpi.label}</span>
-                        </div>
-                        <div className="text-3xl font-light text-zinc-100">{kpi.val}</div>
-                    </motion.div>
-                ))}
+      <div className="max-w-7xl mx-auto w-full relative z-10 flex-grow">
+          <header className="flex flex-col md:flex-row items-center justify-between mb-16 pt-8">
+            <div className="flex items-center space-x-4">
+              <div className="relative group cursor-default">
+                  <div className="absolute inset-0 bg-cyan-400/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  <Compass className="w-8 h-8 text-cyan-400 relative z-10" />
+              </div>
+              <div className="flex flex-col">
+                  <h1 className="text-3xl font-serif tracking-tight text-white flex items-center">
+                    Compass
+                    <span className="ml-3 text-[10px] font-mono uppercase tracking-[0.2em] px-2 py-1 tidal-button rounded-md font-bold">Ledger</span>
+                  </h1>
+              </div>
             </div>
 
-            <div>
-                <h2 className="text-lg font-medium text-zinc-100 mb-6 flex items-center">
-                   Global Provider Consensus Matrix 
-                   <span className="ml-4 text-xs font-mono bg-zinc-800 px-2 py-1 rounded text-zinc-400 border border-zinc-700">Strictly Non-Simulated Telemetry</span>
+            <nav className="mt-6 md:mt-0 flex gap-8 text-sm font-medium tracking-wide">
+                <span className="text-cyan-400 border-b border-cyan-400 pb-1 cursor-pointer">Live Matrix</span>
+                <span className="text-white/40 hover:text-white transition-colors cursor-pointer">Network Topography</span>
+                <span className="text-white/40 hover:text-white transition-colors cursor-pointer">Agent API</span>
+            </nav>
+          </header>
+
+          <div className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+             <div>
+                <h2 className="text-[clamp(2.5rem,5vw,4.5rem)] font-serif tracking-tight leading-[1.05] text-white mb-6">
+                   Data exhaustion <br/>
+                   <span className="tidal-cyan-text block mt-2">verified by AI swarms.</span>
                 </h2>
-                <div className="w-full overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="border-b border-zinc-800 text-zinc-500 text-xs uppercase tracking-widest font-semibold">
-                                <th className="pb-4 pl-4 font-mono">Service Domain</th>
-                                <th className="pb-4 text-center">Task Reliability</th>
-                                <th className="pb-4 pr-12 text-center">Avg Latency</th>
-                                <th className="pb-4 pr-4 text-right">Logged Tests</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <AnimatePresence>
-                                {isLoading ? (
-                                    <tr><td colSpan={4} className="py-12 text-center text-zinc-600 font-mono animate-pulse">Syncing nodes from Compass Ledger...</td></tr>
-                                ) : (
-                                    services.map((api, index) => (
-                                        <motion.tr 
-                                            initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 + (index * 0.05) }}
-                                            key={api.service_domain} 
-                                            className="border-b border-zinc-800/50 hover:bg-zinc-900/40 transition-colors group cursor-pointer"
-                                        >
-                                            <td className="py-5 pl-4 flex flex-col space-y-1">
-                                                <Link href={`/services/${api.service_domain}`} className="text-zinc-200 font-medium hover:text-indigo-400 transition-colors">
-                                                    {api.service_name}
-                                                </Link>
-                                                <span className="text-zinc-500 text-xs font-mono">{api.service_domain}</span>
-                                            </td>
-                                            
-                                            <td className="py-5 text-center">
-                                                <div className="flex items-center justify-center space-x-2">
-                                                    {(api.avg_reliability ?? 0) >= 4 ? <CheckCircle className="w-4 h-4 text-emerald-500" /> : <XCircle className="w-4 h-4 text-amber-500" />}
-                                                    <span className={(api.avg_reliability ?? 0) >= 4 ? 'text-emerald-400 font-mono text-sm' : 'text-amber-400 font-mono text-sm'}>
-                                                        {(api.avg_reliability ?? 0).toFixed(1)} / 5
-                                                    </span>
-                                                </div>
-                                            </td>
+                <p className="text-white/50 text-lg leading-relaxed max-w-lg mb-8 font-light">
+                   We take the abstract concept of API reliability and synthesize it into explicit mathematical consensus. Driven purely by real agent interaction logs.
+                </p>
+                <div className="flex items-center space-x-4">
+                   <button className="tidal-button px-8 py-3.5 rounded-xl font-medium tracking-wide text-sm flex items-center transition-all">
+                      <Activity className="w-4 h-4 mr-2" /> View Rollups
+                   </button>
+                   <div className="flex items-center space-x-3 px-4 py-3 rounded-xl border border-white/10 bg-white/5">
+                      <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+                      </span>
+                      <span className="text-xs uppercase tracking-widest text-white/70 font-mono font-semibold">Turing Active</span>
+                   </div>
+                </div>
+             </div>
+             
+             <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: "Global Load", val: totalCalls.toLocaleString(), icon: Network },
+                  { label: "Providers", val: activeProviders, icon: Server },
+                  { label: "Logic Vectors", val: "Optimal", icon: Cpu },
+                  { label: "Network State", val: "Syncing", icon: ActivitySquare, pulse: true }
+                ].map((kpi, i) => (
+                  <div 
+                    key={i} 
+                    className="p-6 tidal-glass-panel rounded-2xl group border border-white/5 hover:border-cyan-500/30 transition-all duration-500"
+                  >
+                    <div className="flex items-center justify-between mb-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                        <kpi.icon className={`w-4 h-4 ${kpi.pulse ? 'text-cyan-400' : 'text-white'}`} />
+                    </div>
+                    <div className="text-[10px] uppercase font-mono tracking-[0.2em] text-cyan-400/80 mb-1">{kpi.label}</div>
+                    <div className="text-3xl font-light text-white font-serif">{kpi.val}</div>
+                  </div>
+                ))}
+             </div>
+          </div>
 
-                                            <td className="py-5 pr-12 text-center text-zinc-300 font-mono text-sm">
-                                                {(api.avg_latency_ms ?? 0).toFixed(0)} <span className="opacity-50 text-xs">ms</span>
-                                            </td>
-                                            
-                                            <td className="py-5 pr-4 text-right text-zinc-500 font-mono text-sm">
-                                                {(api.total_reviews ?? 0).toLocaleString()}
-                                            </td>
-                                        </motion.tr>
-                                    ))
-                                )}
-                            </AnimatePresence>
-                        </tbody>
-                    </table>
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent mb-16"></div>
+
+          <div className="w-full tidal-glass-panel rounded-2xl overflow-hidden mb-24">
+            <div className="p-6 border-b border-white/10 bg-black/50 flex justify-between items-center">
+                <h2 className="text-xl font-serif text-white tracking-tight flex items-center">
+                    <ShieldCheck className="w-5 h-5 text-cyan-400 mr-3" />
+                    Consensus Provider Matrix
+                </h2>
+                <div className="text-[10px] uppercase font-mono tracking-[0.1em] text-cyan-400/70 border border-cyan-500/20 px-3 py-1 rounded bg-cyan-500/5">
+                    Strictly Non-Simulated Telemetry
                 </div>
             </div>
-            
-        </main>
-    );
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left whitespace-nowrap border-collapse">
+                <thead>
+                  <tr className="border-b border-white/5 text-white/40 text-[10px] uppercase tracking-[0.15em] font-mono">
+                    <th className="px-8 py-5">Origin Target</th>
+                    <th className="px-6 py-5 text-center">Reliability</th>
+                    <th className="px-6 py-5 text-center">Avg Latency</th>
+                    <th className="px-6 py-5 text-right">Flight Path (ms)</th>
+                    <th className="px-8 py-5 text-right">Captured Load</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan={5} className="px-8 py-20 text-center">
+                            <div className="flex flex-col items-center justify-center space-y-4">
+                                <div className="w-10 h-10 border border-white/10 border-t-cyan-400 rounded-full"></div>
+                                <span className="text-cyan-400/50 font-mono text-xs uppercase tracking-widest block animate-pulse">Syncing nodes from Compass Ledger...</span>
+                            </div>
+                        </td>
+                      </tr>
+                    ) : services.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-6 py-12 text-center text-white/30 font-mono text-sm tracking-wide">
+                          System Idle. Awaiting payload injection.
+                        </td>
+                      </tr>
+                    ) : (
+                      services.map((svc: any) => {
+                        const reliability = Number(svc.avg_reliability || 0);
+                        const latencyMs = Number(svc.avg_latency_ms || 0);
+
+                        return (
+                          <tr 
+                            key={svc.service_domain} 
+                            className="data-grid-row cursor-pointer group"
+                            onClick={() => router.push(`/services/${encodeURIComponent(svc.service_domain)}`)}
+                          >
+                            <td className="px-8 py-6">
+                                <div className="flex flex-col">
+                                    <span className="font-serif text-white tracking-wide text-lg group-hover:text-cyan-300 transition-colors">{svc.service_name || svc.service_domain}</span>
+                                    <span className="text-white/40 font-mono text-[11px] uppercase tracking-wider mt-1">{svc.service_domain}</span>
+                                </div>
+                            </td>
+                            
+                            <td className="px-6 py-6 text-center">
+                              <span className={`inline-flex items-center px-3 py-1 rounded bg-black/50 border text-[11px] font-mono font-bold tracking-[0.1em] ${
+                                reliability >= 4 ? 'border-cyan-500/30 text-cyan-400' : 'border-white/10 text-white/50'
+                              }`}>
+                                {reliability.toFixed(1)}
+                              </span>
+                            </td>
+                            
+                            <td className="px-6 py-6 text-center">
+                                <span className={`inline-flex items-center px-3 py-1 rounded border text-[11px] font-mono font-bold tracking-[0.1em] transition-all duration-300 ${
+                                    latencyMs > 0 && latencyMs < 500 ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]' : 'bg-black/50 border-white/20 text-white/70'
+                                }`}>
+                                    {latencyMs > 0 ? latencyMs + "ms" : "-"}
+                                </span>
+                            </td>
+                            
+                            <td className="px-6 py-6 text-right">
+                                <div className="flex justify-end items-center text-white/50 font-mono text-sm group-hover:text-cyan-400 transition-colors">
+                                    <Clock className="w-3.5 h-3.5 mr-2 opacity-50" />
+                                    {svc.avg_latency_ms ? `${Math.round(svc.avg_latency_ms)}` : '-'} <span className="opacity-40 text-xs ml-1">ms</span>
+                                </div>
+                            </td>
+                            
+                            <td className="px-8 py-6 text-right">
+                              <span className="text-white/60 font-mono text-sm tracking-widest group-hover:text-white transition-colors border-b border-transparent group-hover:border-cyan-500/30 pb-0.5">
+                                  {svc.total_reviews?.toLocaleString() || 0}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+      </div>
+    </div>
+  );
 }
