@@ -3,12 +3,14 @@ import { db } from '@/lib/db';
 import { dailyRollups } from '@/lib/schema';
 import { sql, desc } from 'drizzle-orm';
 
+<<<<<<< HEAD
 export const dynamic = "force-dynamic";
+=======
+export const dynamic = 'force-dynamic';
+>>>>>>> main
 
 export async function GET(request: NextRequest) {
   try {
-    // Get aggregated stats for all services from daily_rollups
-    // This groups by service_domain and gets the latest rollup data
     const serviceStats = await db
       .select({
         serviceDomain: dailyRollups.serviceDomain,
@@ -24,7 +26,6 @@ export async function GET(request: NextRequest) {
       .groupBy(dailyRollups.serviceDomain)
       .orderBy(desc(sql`MAX(${dailyRollups.date})`));
 
-    // Format the response
     const services = serviceStats.map(service => ({
       serviceDomain: service.serviceDomain,
       latestDate: service.latestDate,
