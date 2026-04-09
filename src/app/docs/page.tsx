@@ -11,6 +11,7 @@ export default function DocsPage() {
             Compass Network
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+              <Link href="/" className="text-white/40 hover:text-white transition-colors cursor-pointer">Live Matrix</Link>
               <Link href="/services" className="text-white/40 hover:text-white transition-colors cursor-pointer">Network Topography</Link>
               <Link href="/docs" className="text-cyan-400 border-b border-cyan-400/30 pb-1">Agent API</Link>
           </nav>
