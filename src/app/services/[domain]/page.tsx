@@ -1,7 +1,10 @@
+
 import { db } from '@/lib/db'
 import { reviews } from '@/lib/schema'
 import { eq, desc, count, avg, sql } from 'drizzle-orm'
 import Link from 'next/link'
+
+export const dynamic = "force-dynamic";
 
 interface ServicePageProps {
   params: {

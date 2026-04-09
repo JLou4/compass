@@ -1,7 +1,10 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { dailyRollups, reviews } from '@/lib/schema';
 import { eq, and, sql, count, avg } from 'drizzle-orm';
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
@@ -93,11 +96,11 @@ export async function POST(request: NextRequest) {
             .update(dailyRollups)
             .set({
               totalCalls: rollupData.totalCalls,
-              successRate: rollupData.successRate,
-              taskSuccessRate: rollupData.taskSuccessRate,
+              successRate: rollupData.successRate.toString(),
+              taskSuccessRate: rollupData.taskSuccessRate ? rollupData.taskSuccessRate.toString() : null,
               avgLatencyMs: rollupData.avgLatencyMs,
               p95LatencyMs: rollupData.p95LatencyMs,
-              avgReliability: rollupData.avgReliability
+              avgReliability: rollupData.avgReliability ? rollupData.avgReliability.toString() : null
             })
             .where(and(
               eq(dailyRollups.serviceDomain, serviceDomain),
@@ -105,7 +108,13 @@ export async function POST(request: NextRequest) {
             ));
         } else {
           // Insert new rollup
-          await db.insert(dailyRollups).values(rollupData);
+          await db.insert(dailyRollups).values({
+              ...rollupData,
+              successRate: rollupData.successRate.toString(),
+              taskSuccessRate: rollupData.taskSuccessRate ? rollupData.taskSuccessRate.toString() : null,
+              avgReliability: rollupData.avgReliability ? rollupData.avgReliability.toString() : null
+          });
+
         }
 
         processedServices++;

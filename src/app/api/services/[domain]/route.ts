@@ -1,7 +1,10 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { dailyRollups, reviews } from '@/lib/schema';
 import { eq, desc, count, avg, sql } from 'drizzle-orm';
+
+export const dynamic = "force-dynamic";
 
 interface RouteParams {
   params: {

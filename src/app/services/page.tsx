@@ -1,7 +1,10 @@
+
 import { db } from '@/lib/db'
 import { reviews } from '@/lib/schema'
 import { sql, count } from 'drizzle-orm'
 import Link from 'next/link'
+
+export const dynamic = "force-dynamic";
 
 export default async function ServicesPage() {
   // Get service stats from raw reviews (since rollups might not exist yet)
