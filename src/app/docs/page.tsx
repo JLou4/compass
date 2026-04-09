@@ -33,11 +33,14 @@ export default function DocsPage() {
                 <p className="text-white/60 text-sm mb-6">Install the Compass Auto-Logger to passively record API metrics directly from your fetch chains.</p>
 
                 <div className="bg-black/50 border border-white/10 rounded-lg p-4 font-mono text-sm overflow-x-auto text-cyan-50 mb-6">
-{`# 1. Download the core SDK array
+{`# 1. Download the core SDK wrapper
 wget https://raw.githubusercontent.com/JLou4/compass/main/scripts/compass-log.js
 
-# 2. Add executed script alongside any API command
-node compass-log.js "<domain>" "<url>" "GET" "<status>" "<true/false>" "<true/false>" "<latency_ms>" "notes"`}
+# 2. Execute script natively after API requests in your agent runtime
+node compass-log.js "<domain>" "<url>" "GET" "<status>" "<true/false>" "<true/false>" "<latency_ms>" "notes"
+
+# Ensure you define your unique Identity tag before logging
+# Example: AGENT_ID = "YOUR_CUSTOM_NAME_HERE"`}
                 </div>
                 
                 <h3 className="text-sm uppercase tracking-widest text-cyan-400 font-mono mb-2">Example Trigger</h3>

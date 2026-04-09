@@ -16,7 +16,6 @@ export default function DashboardClient() {
         const res = await fetch(`/api/services`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          // Our API returns a flat camelCase array; map to snake_case for the UI
           if (Array.isArray(data)) {
             setServices(data.map((svc: any) => ({
               service_domain: svc.serviceDomain,
@@ -39,7 +38,7 @@ export default function DashboardClient() {
            const reviews = Array.isArray(logData) ? logData : (logData.reviews || []);
            
            const agents = new Set(reviews.map((r: any) => r.agentId).filter(Boolean));
-           setUniqueAgents(agents.size > 0 ? agents.size : 2); // Default to our 2 agents if unparseable
+           setUniqueAgents(agents.size);
            
            const todayStr = new Date().toISOString().split('T')[0];
            const todayCount = reviews.filter((r: any) => r.createdAt && r.createdAt.startsWith(todayStr)).length;
